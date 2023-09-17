@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.drxgb</groupId>
+	<artifactId>arduinolibrarybuilder</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Arduino Library Builder</name>
+	<description>Utility tool to ease Arduino Libraries creations.</description>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>19</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>19</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>19</version>
+		</dependency>
+		
+		<!-- XGB Utils -->
+		<dependency>
+			<groupId>com.drxgb</groupId>
+			<artifactId>utils</artifactId>
+			<version>1.10.3</version>
+		</dependency>
+
+		<!-- XGB JavaFX Utils -->
+		<dependency>
+			<groupId>com.drxgb</groupId>
+			<artifactId>javafx-utils</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+	</dependencies>
+</project>

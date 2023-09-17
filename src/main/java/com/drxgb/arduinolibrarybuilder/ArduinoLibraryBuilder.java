@@ -1,6 +1,9 @@
-package com.drxgb.arduinolibrarybuilder.app;
+package com.drxgb.arduinolibrarybuilder;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -26,6 +29,11 @@ public final class ArduinoLibraryBuilder extends Application
 	 */
 	public static final String APP_VERSION = "1.0.0";
 	
+	/**
+	 * Cena da janela principal
+	 */
+	private static Scene mainScene;
+	
 	
 	/*
 	 * ===========================================================
@@ -50,6 +58,16 @@ public final class ArduinoLibraryBuilder extends Application
 	}
 	
 	
+	/**
+	 * Recebe a cena principal da aplicação
+	 * @return A cena da aplicação principal
+	 */
+	public static Scene getScene()
+	{
+		return mainScene;
+	}
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS IMPLEMENTADOS ***
@@ -60,9 +78,18 @@ public final class ArduinoLibraryBuilder extends Application
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 */
 	@Override
-	public void start(Stage primaryStage) throws Exception
+	public void start(Stage stage) throws Exception
 	{
-		// TODO Criar janela
-		System.out.println("Começou");
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/MainView.fxml"));
+		Parent root = loader.load();
+		
+		mainScene = new Scene(root);
+		// TODO: Carregar CSS
+		
+		// TODO: Inserir ícone da aplicação
+		stage.setResizable(false);
+		stage.setScene(mainScene);
+		stage.setTitle(APP_NAME);
+		stage.show();
 	}
 }

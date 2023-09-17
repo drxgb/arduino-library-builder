@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.arduinolibrarybuilder.controller.MainController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Open">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <Menu mnemonicParsing="false" text="Open Recent" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mnitBuildZip" mnemonicParsing="false" text="Build ZIP" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" text="Exit">
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="View">
+            <items>
+              <MenuItem mnemonicParsing="false" text="File Structure">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="DIGIT1" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" text="Properties">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="DIGIT2" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" text="Keywords">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="DIGIT3" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu mnemonicParsing="false" text="Theme" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Library Specification" />
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <VBox spacing="12.0">
+         <padding>
+            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+         </padding>
+         <children>
+            <GridPane hgap="8.0" vgap="4.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints hgrow="NEVER" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onOpenFolderAction" prefWidth="140.0" text="Open Folder" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="btnBuildZip" mnemonicParsing="false" onAction="#onBuildZipAction" prefHeight="25.0" prefWidth="140.0" text="Build ZIP" GridPane.columnIndex="1" />
+                  <Label text="Selected Path:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblSelectedPath" text="(no path selected)" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+      <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="File Structure">
+               <content>
+                  <HBox spacing="24.0">
+                     <padding>
+                        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                     </padding>
+                     <children>
+                        <ListView fx:id="lstUnselectedFiles" HBox.hgrow="ALWAYS" />
+                        <VBox alignment="CENTER" spacing="12.0" HBox.hgrow="SOMETIMES">
+                           <children>
+                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onAddAction" text="Add" />
+                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onAddAllAction" text="Add All" />
+                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAction" text="Remove" />
+                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAllAction" text="Remove All" />
+                           </children>
+                        </VBox>
+                        <ListView fx:id="lstSelectedFiles" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </content>
+          </Tab>
+          <Tab text="Properties">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                     <content>
+                        <VBox spacing="24.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false" onAction="#onUsePropertiesFileAction" text="Use library.properties file" />
+                              <GridPane fx:id="parPropertiesTab" disable="true" hgap="8.0" vgap="4.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="NEVER" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints vgrow="NEVER" />
+                                  <RowConstraints vgrow="NEVER" />
+                                  <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints vgrow="NEVER" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Name" />
+                                    <Label text="Version" GridPane.rowIndex="1" />
+                                    <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                    <Label text="Author name" GridPane.rowIndex="3" />
+                                    <Label text="Author email" GridPane.rowIndex="4" />
+                                    <Label text="Maintainer name" GridPane.rowIndex="5" />
+                                    <Label text="Maintainer email" GridPane.rowIndex="6" />
+                                    <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+                                    <Label text="Sentence" GridPane.rowIndex="8" />
+                                    <Label text="Paragraph" GridPane.rowIndex="9" />
+                                    <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="10" />
+                                    <Label text="Category" GridPane.rowIndex="11" />
+                                    <Label text="URL" GridPane.rowIndex="12" />
+                                    <Label text="Architetures" GridPane.rowIndex="13" />
+                                    <Label text="Depends" GridPane.rowIndex="14" />
+                                    <Label text="Includes" GridPane.rowIndex="15" />
+                                    <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="16" />
+                                    <Label text="Use .a linkage" GridPane.rowIndex="17" />
+                                    <Label text="Precompiled" GridPane.rowIndex="18" />
+                                    <Label text="Linker flags" GridPane.rowIndex="19" />
+                                    <TextField fx:id="txtName" GridPane.columnIndex="1">
+                                       <tooltip>
+                                          <Tooltip text="Library names must contain only basic letters (A-Z or a-z) and numbers (0-9), spaces ( ), underscores (_), dots (.) and dashes (-). They must start with a letter or number. Note that libraries with a name value starting with Arduino will no longer be allowed addition to the Library Manager index as these names are now reserved for official Arduino libraries." />
+                                       </tooltip>
+                                    </TextField>
+                                    <TextField fx:id="txtVersion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="txtAuthorName" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="txtAuthorEmail" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="txtMaintainerName" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <TextField fx:id="txtMaintainerEmail" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <TextField fx:id="txtSentence" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                    <TextArea fx:id="txtParagraph" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.vgrow="ALWAYS" />
+                                    <ComboBox fx:id="cbxCategory" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                                    <TextField fx:id="txtUrl" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                                    <TextArea fx:id="txtArchitectures" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                                    <TextArea fx:id="txtDepends" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                                    <TextArea fx:id="txtIncludes" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                                    <CheckBox fx:id="chkUseALinkage" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+                                    <ComboBox fx:id="cbxPrecompiled" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+                                    <TextField fx:id="txtLbFlags" GridPane.columnIndex="1" GridPane.rowIndex="19" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </content>
+                     <padding>
+                        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                     </padding>
+                  </ScrollPane>
+               </content>
+          </Tab>
+            <Tab text="Keywords">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                     <content>
+                        <VBox spacing="12.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false" onAction="#onUseKeywordFileAction" text="Use keywords.txt file" />
+                              <VBox fx:id="parKeywordsTab" disable="true">
+                                 <children>
+                                    <HBox alignment="TOP_RIGHT">
+                                       <children>
+                                          <Button minWidth="140.0" mnemonicParsing="false" onAction="#onAddKeywordAction" text="Add Keyword" />
+                                       </children>
+                                    </HBox>
+                                    <VBox fx:id="parKeywords" />
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>

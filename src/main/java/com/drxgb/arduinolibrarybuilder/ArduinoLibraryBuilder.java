@@ -1,5 +1,7 @@
 package com.drxgb.arduinolibrarybuilder;
 
+import com.drxgb.arduinolibrarybuilder.controller.Controller;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -68,6 +70,16 @@ public final class ArduinoLibraryBuilder extends Application
 	}
 	
 	
+	/**
+	 * Recebe a janela principal da aplicação
+	 * @return
+	 */
+	public static Stage getStage()
+	{
+		return mainScene != null ? (Stage) mainScene.getWindow() : null;
+	}
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS IMPLEMENTADOS ***
@@ -82,11 +94,13 @@ public final class ArduinoLibraryBuilder extends Application
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/MainView.fxml"));
 		Parent root = loader.load();
+		Controller controller = loader.getController();
 		
 		mainScene = new Scene(root);
 		// TODO: Carregar CSS
 		
 		// TODO: Inserir ícone da aplicação
+		stage.setOnCloseRequest(ev -> controller.onCloseAction());
 		stage.setResizable(false);
 		stage.setScene(mainScene);
 		stage.setTitle(APP_NAME);

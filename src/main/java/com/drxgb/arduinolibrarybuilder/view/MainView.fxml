@@ -25,22 +25,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.arduinolibrarybuilder.controller.MainController">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.arduinolibrarybuilder.controller.MainController">
    <children>
       <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Open">
+                  <MenuItem mnemonicParsing="false" onAction="#onOpenFolderAction" text="Open">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
                   <Menu mnemonicParsing="false" text="Open Recent" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="mnitBuildZip" mnemonicParsing="false" text="Build ZIP" />
+                  <MenuItem fx:id="mnitBuildZip" disable="true" mnemonicParsing="false" onAction="#onBuildZipAction" text="Build ZIP" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" text="Exit">
+              <MenuItem mnemonicParsing="false" onAction="#onCloseAction" text="Exit">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -49,17 +49,17 @@
           </Menu>
           <Menu mnemonicParsing="false" text="View">
             <items>
-              <MenuItem mnemonicParsing="false" text="File Structure">
+              <MenuItem mnemonicParsing="false" onAction="#onFileStructureTabAction" text="File Structure">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="DIGIT1" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Properties">
+                  <MenuItem mnemonicParsing="false" onAction="#onPropertiesTabAction" text="Properties">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="DIGIT2" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Keywords">
+                  <MenuItem mnemonicParsing="false" onAction="#onKeywordsTabAction" text="Keywords">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="DIGIT3" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -92,7 +92,7 @@
               </rowConstraints>
                <children>
                   <Button mnemonicParsing="false" onAction="#onOpenFolderAction" prefWidth="140.0" text="Open Folder" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Button fx:id="btnBuildZip" mnemonicParsing="false" onAction="#onBuildZipAction" prefHeight="25.0" prefWidth="140.0" text="Build ZIP" GridPane.columnIndex="1" />
+                  <Button fx:id="btnBuildZip" disable="true" mnemonicParsing="false" onAction="#onBuildZipAction" prefHeight="25.0" prefWidth="140.0" text="Build ZIP" GridPane.columnIndex="1" />
                   <Label text="Selected Path:">
                      <font>
                         <Font name="System Bold" size="12.0" />

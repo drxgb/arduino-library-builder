@@ -21,7 +21,8 @@ import javafx.scene.control.TextField;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public class MainController implements Initializable
+public class MainController extends Controller
+	implements Initializable
 {
 	/*
 	 * ===========================================================
@@ -102,6 +103,69 @@ public class MainController implements Initializable
 	 */
 	@FXML
 	public void onOpenFolderAction()
+	{
+		
+	}
+	
+	
+	// Menu
+	// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=	
+	
+	/**
+	 * Seleciona a aba File Structure
+	 */
+	@FXML
+	public void onFileStructureTabAction()
+	{
+		
+	}
+	
+	
+	/**
+	 * Seleciona a aba Properties
+	 */
+	@FXML
+	public void onPropertiesTabAction()
+	{
+		
+	}
+	
+	
+	/**
+	 * Seleciona a aba Keywords
+	 */
+	@FXML
+	public void onKeywordsTabAction()
+	{
+		
+	}
+	
+	
+	/**
+	 * Seleciona o tema da interface gráfica
+	 * @param ev Evento disparado do componente na janela
+	 */
+	public void onThemeAction(ActionEvent ev)
+	{
+		
+	}
+	
+	
+	/**
+	 * Abre a página sobre criação de biblioteca
+	 */
+	@FXML
+	public void onLibrarySpecificationAction()
+	{
+		
+	}
+	
+	
+	/**
+	 * Abre a janela "Sobre"
+	 */
+	@FXML
+	public void onAboutAction()
 	{
 		
 	}
@@ -188,9 +252,9 @@ public class MainController implements Initializable
 	
 	/**
 	 * Retira a palavra-chave da lista
-	 * @param e Evento disparado pelo elemento na janela
+	 * @param ev Evento disparado pelo elemento na janela
 	 */
-	public void onRemoveKeywordAction(ActionEvent e)
+	public void onRemoveKeywordAction(ActionEvent ev)
 	{
 		
 	}

@@ -65,7 +65,7 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <Menu mnemonicParsing="false" text="Theme" />
+                  <Menu fx:id="mnuThemes" mnemonicParsing="false" text="Theme" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

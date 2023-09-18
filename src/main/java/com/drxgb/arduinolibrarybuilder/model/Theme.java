@@ -1,4 +1,4 @@
-package com.drxgb.arduinolibrarybuilder.ui;
+package com.drxgb.arduinolibrarybuilder.model;
 
 /**
  * Representa o tema de estilo da interface gráfica
@@ -15,7 +15,7 @@ public class Theme
 	 */
 	
 	private String name;
-	private String externalForm;
+	private String path;
 	
 
 	/*
@@ -24,10 +24,10 @@ public class Theme
 	 * ===========================================================
 	 */
 	
-	public Theme(String name, String externalForm)
+	public Theme(String name, String path)
 	{
 		this.name = name;
-		this.externalForm = externalForm;
+		this.path = path;
 	}
 
 
@@ -43,9 +43,9 @@ public class Theme
 	}
 
 
-	public String getExternalForm()
+	public String getPath()
 	{
-		return externalForm;
+		return path;
 	}
 
 
@@ -55,9 +55,9 @@ public class Theme
 	}
 
 
-	public void setExternalForm(String externalForm)
+	public void setPath(String path)
 	{
-		this.externalForm = externalForm;
+		this.path = path;
 	}
 
 
@@ -72,7 +72,7 @@ public class Theme
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((externalForm == null) ? 0 : externalForm.hashCode());
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -92,12 +92,12 @@ public class Theme
 		if (getClass() != obj.getClass())
 			return false;
 		Theme other = (Theme) obj;
-		if (externalForm == null)
+		if (path == null)
 		{
-			if (other.externalForm != null)
+			if (other.path != null)
 				return false;
 		}
-		else if (!externalForm.equals(other.externalForm))
+		else if (!path.equals(other.path))
 			return false;
 		if (name == null)
 		{
@@ -123,14 +123,6 @@ public class Theme
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-		builder.append(name)
-			.append(" <")
-			.append(externalForm)
-			.append(">");
-		return builder.toString();
+		return name;
 	}
-	
-	
-	
 }

@@ -3,9 +3,14 @@ package com.drxgb.arduinolibrarybuilder.controller;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
+import com.drxgb.arduinolibrarybuilder.model.Theme;
+import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
+import com.drxgb.arduinolibrarybuilder.service.ThemeService;
 import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
 import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
@@ -21,10 +26,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 
@@ -45,8 +53,9 @@ public class MainController extends Controller
 	// Principal
 	@FXML private Label lblSelectedPath;
 	@FXML private Button btnBuildZip;
-	@FXML private MenuItem mnitBuildZip;
 	@FXML private TabPane tabMain;
+	@FXML private MenuItem mnitBuildZip;
+	@FXML private Menu mnuThemes;
 
 	// File Structure
 	@FXML private ListView<String> lstUnselectedFiles;
@@ -82,6 +91,15 @@ public class MainController extends Controller
 	
 	/*
 	 * ===========================================================
+	 * 			*** ASSOCIAÇÕES ***
+	 * ===========================================================
+	 */
+	
+	private ThemeService themeService;
+	
+	
+	/*
+	 * ===========================================================
 	 * 			*** CONSTRUTORES ***
 	 * ===========================================================
 	 */
@@ -89,7 +107,7 @@ public class MainController extends Controller
 	public MainController()
 	{
 		super();
-		
+		themeService = new ThemeService();
 	}
 	
 
@@ -105,6 +123,7 @@ public class MainController extends Controller
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
+		loadThemes();
 		setTooltipForTextAreas();
 		setCellFactoryToListView(lstUnselectedFiles);
 		setCellFactoryToListView(lstSelectedFiles);
@@ -451,5 +470,38 @@ public class MainController extends Controller
 		btnAddAll.setDisable(addDisabled);
 		btnRemove.setDisable(removeDisabled);
 		btnRemoveAll.setDisable(removeDisabled);
+	}
+	
+	
+	/**
+	 * Carrega os temas e adiciona ao menu
+	 */
+	private void loadThemes()
+	{
+		File dir = new File(ArduinoLibraryBuilder.class.getResource("style/").getPath()); 
+		ObservableList<MenuItem> items = mnuThemes.getItems();
+		List<Theme> themes = ThemeLoader.loadFromFolder(dir);
+		ToggleGroup toggleGroup = new ToggleGroup();
+		Theme theme;
+		RadioMenuItem item;
+		
+		items.clear();
+		for (int i = 0; i < themes.size(); ++i)
+		{
+			final int index = i;
+
+			theme = themes.get(index);
+			item = new RadioMenuItem(theme.getName());
+			item.setToggleGroup(toggleGroup);
+			item.selectedProperty().addListener(ev -> {
+				themeService.setCurrentTheme(index);
+				themeService.applyTheme(root.getScene());
+			});
+			items.add(item);
+		}
+		
+		themeService.setThemes(themes);
+		item = (RadioMenuItem)mnuThemes.getItems().get(0);
+		item.setSelected(true);
 	}
 }

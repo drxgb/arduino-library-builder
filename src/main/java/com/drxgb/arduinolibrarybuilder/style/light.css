@@ -1,0 +1,69 @@
+/*
+ * ToolBar
+ */ 
+.separator:vertical
+{
+	-fx-padding: 0 8px;
+}
+
+
+.separator:horizontal
+{
+	-fx-padding: 8px 0;
+}
+
+
+/*
+ * TabPane
+ */ 
+.tab .tab-close-button
+{
+ 	-fx-background-color: red;
+}
+
+
+/*
+ * Buttons
+ */
+ .button, .toggle-button
+ {
+	-fx-color: rgb(0, 127, 255);
+	-fx-text-fill: white;
+	-fx-border-color: rgb(0, 48, 192);
+	-fx-underline: false;
+	-fx-border-width: 2px;
+}
+
+
+.button:hover, .toggle-button:hover 
+{
+	-fx-color: rgb(0, 160, 255);
+}
+
+
+.toggle-button:selected, .button:pressed 
+{
+	-fx-color: rgb(0, 20, 160);
+}
+
+.btn-remove
+{
+	-fx-color: rgb(255, 80, 80);
+	-fx-text-fill: white;
+	-fx-border-color: rgb(192, 0, 0);
+	-fx-underline: false;
+	-fx-border-width: 2px;
+}
+
+
+.btn-remove:hover
+{
+	-fx-color: rgb(255, 20, 20);
+}
+
+
+.btn-remove:pressed
+{
+	-fx-color: rgb(192, 0, 0);	
+	-fx-border-color: rgb(255, 20, 20);
+}

@@ -103,11 +103,11 @@
             </GridPane>
          </children>
       </VBox>
-      <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+      <TabPane fx:id="tabMain" disable="true" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
           <Tab text="File Structure">
                <content>
-                  <HBox spacing="24.0">
+                  <HBox disable="true" spacing="24.0">
                      <padding>
                         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
                      </padding>
@@ -115,10 +115,10 @@
                         <ListView fx:id="lstUnselectedFiles" HBox.hgrow="ALWAYS" />
                         <VBox alignment="CENTER" spacing="12.0" HBox.hgrow="SOMETIMES">
                            <children>
-                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onAddAction" text="Add" />
-                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onAddAllAction" text="Add All" />
-                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAction" text="Remove" />
-                              <Button minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAllAction" text="Remove All" />
+                              <Button fx:id="btnAdd" minWidth="128.0" mnemonicParsing="false" onAction="#onAddAction" text="Add" />
+                              <Button fx:id="btnAddAll" minWidth="128.0" mnemonicParsing="false" onAction="#onAddAllAction" text="Add All" />
+                              <Button fx:id="btnRemove" minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAction" text="Remove" />
+                              <Button fx:id="btnRemoveAll" minWidth="128.0" mnemonicParsing="false" onAction="#onRemoveAllAction" text="Remove All" />
                            </children>
                         </VBox>
                         <ListView fx:id="lstSelectedFiles" HBox.hgrow="ALWAYS" />
@@ -135,7 +135,7 @@
                               <CheckBox mnemonicParsing="false" onAction="#onUsePropertiesFileAction" text="Use library.properties file" />
                               <GridPane fx:id="parPropertiesTab" disable="true" hgap="8.0" vgap="4.0">
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="NEVER" />
+                                  <ColumnConstraints halignment="RIGHT" hgrow="NEVER" />
                                   <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
                                 <rowConstraints>
@@ -148,13 +148,13 @@
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
-                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="140.0" valignment="TOP" vgrow="SOMETIMES" />
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
-                                    <RowConstraints vgrow="NEVER" />
-                                    <RowConstraints vgrow="NEVER" />
-                                    <RowConstraints vgrow="NEVER" />
+                                    <RowConstraints minHeight="140.0" valignment="TOP" vgrow="NEVER" />
+                                    <RowConstraints minHeight="140.0" valignment="TOP" vgrow="NEVER" />
+                                    <RowConstraints minHeight="140.0" valignment="TOP" vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
                                     <RowConstraints vgrow="NEVER" />
@@ -186,7 +186,10 @@
                                           <Tooltip text="Library names must contain only basic letters (A-Z or a-z) and numbers (0-9), spaces ( ), underscores (_), dots (.) and dashes (-). They must start with a letter or number. Note that libraries with a name value starting with Arduino will no longer be allowed addition to the Library Manager index as these names are now reserved for official Arduino libraries." />
                                        </tooltip>
                                     </TextField>
-                                    <TextField fx:id="txtVersion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="txtVersion" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <tooltip>
+                                          <Tooltip text="Version should be semver compliant. 1.2.0 is correct; 1.2 is accepted; r5, 003, 1.1c are invalid" />
+                                       </tooltip></TextField>
                                     <TextField fx:id="txtAuthorName" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <TextField fx:id="txtAuthorEmail" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     <TextField fx:id="txtMaintainerName" GridPane.columnIndex="1" GridPane.rowIndex="5" />
@@ -195,7 +198,7 @@
                                     <TextArea fx:id="txtParagraph" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.vgrow="ALWAYS" />
                                     <ComboBox fx:id="cbxCategory" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                                     <TextField fx:id="txtUrl" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                                    <TextArea fx:id="txtArchitectures" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                                    <TextArea fx:id="txtArchitectures" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                                     <TextArea fx:id="txtDepends" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
                                     <TextArea fx:id="txtIncludes" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
                                     <CheckBox fx:id="chkUseALinkage" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="17" />

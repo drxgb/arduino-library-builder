@@ -1,15 +1,18 @@
 package com.drxgb.arduinolibrarybuilder;
 
+import java.io.InputStream;
+
 import com.drxgb.arduinolibrarybuilder.controller.Controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * Representa a aplicação principal no qual é mostrada a interface gráfica.
+ * Representa a aplicaÃ§Ã£o principal no qual Ã© mostrada a interface grÃ¡fica.
  * @author Dr.XGB
  * @version 1.0.0
  */
@@ -22,14 +25,31 @@ public final class ArduinoLibraryBuilder extends Application
 	 */
 	
 	/**
-	 * Nome da aplicação
+	 * Nome da aplicaÃ§Ã£o
 	 */
 	public static final String APP_NAME = "Arduino Library Builder";
 	
 	/**
-	 * Versão da aplicação
+	 * VersÃ£o da aplicaÃ§Ã£o
 	 */
 	public static final String APP_VERSION = "1.0.0";
+	
+	/**
+	 * Caminho dos recursos
+	 */
+	public static final String RESOURCES_PATH = "/resources/";
+	
+	/**
+	 * Caminho dos Ã­cones
+	 */
+	public static final String ICON_PATH = RESOURCES_PATH + "icon/";
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** ATRIBUTOS ***
+	 * ===========================================================
+	 */
 	
 	/**
 	 * Cena da janela principal
@@ -39,12 +59,12 @@ public final class ArduinoLibraryBuilder extends Application
 	
 	/*
 	 * ===========================================================
-	 * 			*** MÉTODOS PÚBLICOS ESTÁTICOS ***
+	 * 			*** Mï¿½TODOS PÃšBLICOS ESTÃTICOS ***
 	 * ===========================================================
 	 */
 	
 	/**
-	 * Inicializa a aplicação
+	 * Inicializa a aplicaÃ§Ã£o
 	 * @param args Argumentos passados do sistema operacional para o programa
 	 */
 	public static void main(String[] args)
@@ -61,8 +81,8 @@ public final class ArduinoLibraryBuilder extends Application
 	
 	
 	/**
-	 * Recebe a cena principal da aplicação
-	 * @return A cena da aplicação principal
+	 * Recebe a cena principal da aplicaÃ§Ã£o
+	 * @return A cena da aplicaÃ§Ã£o principal
 	 */
 	public static Scene getScene()
 	{
@@ -71,7 +91,7 @@ public final class ArduinoLibraryBuilder extends Application
 	
 	
 	/**
-	 * Recebe a janela principal da aplicação
+	 * Recebe a janela principal da aplicaÃ§Ã£o
 	 * @return
 	 */
 	public static Stage getStage()
@@ -82,7 +102,7 @@ public final class ArduinoLibraryBuilder extends Application
 	
 	/*
 	 * ===========================================================
-	 * 			*** MÉTODOS IMPLEMENTADOS ***
+	 * 			*** MÃ‰TODOS IMPLEMENTADOS ***
 	 * ===========================================================
 	 */
 	
@@ -95,11 +115,13 @@ public final class ArduinoLibraryBuilder extends Application
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/MainView.fxml"));
 		Parent root = loader.load();
 		Controller controller = loader.getController();
+		InputStream icon = getClass().getResourceAsStream(ICON_PATH + "app.png");
 		
 		mainScene = new Scene(root);
-		// TODO: Carregar CSS
+		mainScene.getStylesheets().add(getClass().getResource("style/light.css").toExternalForm());
 		
-		// TODO: Inserir ícone da aplicação
+		if (icon != null)
+			stage.getIcons().add(new Image(icon));		
 		stage.setOnCloseRequest(ev -> controller.onCloseAction());
 		stage.setResizable(false);
 		stage.setScene(mainScene);

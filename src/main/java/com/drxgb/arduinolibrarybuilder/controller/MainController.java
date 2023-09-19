@@ -4,11 +4,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
 import com.drxgb.arduinolibrarybuilder.model.Theme;
+import com.drxgb.arduinolibrarybuilder.service.RecentFoldersLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeService;
 import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
@@ -16,6 +18,7 @@ import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
 import com.drxgb.util.PropertiesManager;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,6 +49,27 @@ public class MainController extends Controller
 {
 	/*
 	 * ===========================================================
+	 * 			*** CONSTANTES ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Nome do arquivo de configurações
+	 */
+	private static final String PROPS_FILE = "settings.properties";
+	
+	/**
+	 * Chave do último diretório carregado
+	 */
+	private static final String DIR_KEY = "dir";
+	
+	/**
+	 * Chave do último estilo carregado
+	 */
+	private static final String STYLE_KEY = "style";
+	
+	/*
+	 * ===========================================================
 	 * 			*** ATRIBUTOS ***
 	 * ===========================================================
 	 */
@@ -55,6 +79,7 @@ public class MainController extends Controller
 	@FXML private Button btnBuildZip;
 	@FXML private TabPane tabMain;
 	@FXML private MenuItem mnitBuildZip;
+	@FXML private Menu mnuOpenRecent;
 	@FXML private Menu mnuThemes;
 
 	// File Structure
@@ -96,6 +121,7 @@ public class MainController extends Controller
 	 */
 	
 	private ThemeService themeService;
+	private RecentFoldersLoader recentFoldersLoader;
 	
 	
 	/*
@@ -108,6 +134,7 @@ public class MainController extends Controller
 	{
 		super();
 		themeService = new ThemeService();
+		recentFoldersLoader = new RecentFoldersLoader();
 	}
 	
 
@@ -124,12 +151,13 @@ public class MainController extends Controller
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loadThemes();
+		loadRecentFolders();
 		setTooltipForTextAreas();
 		setCellFactoryToListView(lstUnselectedFiles);
 		setCellFactoryToListView(lstSelectedFiles);
 	}
-	
-	
+
+
 	/*
 	 * ===========================================================
 	 * 			*** AÇÕES DO CONTROLADOR ***
@@ -157,11 +185,11 @@ public class MainController extends Controller
 	{
 		String path;
 		File directory;
-		File settings = new File("settings.properties");
+		File settings = new File(PROPS_FILE);
 		DirectoryChooser chooser = new DirectoryChooser();
 		Properties props = PropertiesManager.load(settings); 
 		
-		path = props.getProperty("dir");
+		path = props.getProperty(DIR_KEY);
 		if (path != null)
 			chooser.setInitialDirectory(new File(path));
 		
@@ -171,12 +199,7 @@ public class MainController extends Controller
 		if (directory != null)
 		{
 			path = directory.getAbsolutePath();
-			lblSelectedPath.setText(path);
-			tabMain.setDisable(false);
-			loadFileStructure(directory);
-			updateFileStructureButtons();
-			props.setProperty("dir", path);
-			PropertiesManager.save(settings, props);
+			openFolder(path);
 		}
 	}
 	
@@ -483,25 +506,132 @@ public class MainController extends Controller
 		List<Theme> themes = ThemeLoader.loadFromFolder(dir);
 		ToggleGroup toggleGroup = new ToggleGroup();
 		Theme theme;
-		RadioMenuItem item;
+		int initialIndex;
 		
 		items.clear();
 		for (int i = 0; i < themes.size(); ++i)
 		{
 			final int index = i;
+			RadioMenuItem item;
 
 			theme = themes.get(index);
 			item = new RadioMenuItem(theme.getName());
 			item.setToggleGroup(toggleGroup);
-			item.selectedProperty().addListener(ev -> {
+			item.setOnAction((ev) -> {
+				File settings = new File(PROPS_FILE);
+				Properties props = PropertiesManager.load(settings);
+				MenuItem menuItem = (MenuItem)ev.getSource();
+				String styleName = menuItem.getText();
+				Theme style = themeService.getThemes()
+						.stream()
+						.filter(t -> t.getName().equals(styleName))
+						.findFirst()
+						.get();
+				
 				themeService.setCurrentTheme(index);
 				themeService.applyTheme(root.getScene());
+				props.setProperty(STYLE_KEY, style.getPath());
+				PropertiesManager.save(settings, props);
 			});
 			items.add(item);
 		}
 		
 		themeService.setThemes(themes);
-		item = (RadioMenuItem)mnuThemes.getItems().get(0);
-		item.setSelected(true);
+		initialIndex = getLastStyleIndex();
+		
+		final RadioMenuItem item = (RadioMenuItem)mnuThemes.getItems().get(initialIndex);
+		Platform.runLater(() -> {
+			while (root.getScene() == null);
+			item.fire();
+			item.setSelected(true);
+		});
+	}
+	
+	
+	/**
+	 * Encontra o índice do último estilo carregado anteriormente
+	 * @return
+	 */
+	private int getLastStyleIndex()
+	{
+		File settings = new File(PROPS_FILE);
+		Properties props = PropertiesManager.load(settings);
+		Theme theme;
+		int index;
+		final String style = props.getProperty(STYLE_KEY);
+		
+		index = 0;
+		
+		if (style != null)
+		{
+			Optional<Theme> result;
+			result = themeService.getThemes()
+					.stream()
+					.filter(t -> t.getPath().equals(style))
+					.findFirst();
+			
+			if (result.isPresent())
+			{
+				theme = result.get();
+				index = themeService.getThemes().indexOf(theme);
+				
+				if (index == -1)
+					index = 0;
+			}
+		}
+		
+		return index;
+	}
+	
+	
+	/**
+	 * Carrega os arquivos recentes
+	 */
+	private void loadRecentFolders()
+	{
+		List<String> folders;
+		ObservableList<MenuItem> items;
+		MenuItem item;
+		Label label;
+		int index = 0;
+		
+		recentFoldersLoader.load(PROPS_FILE);
+		folders = recentFoldersLoader.getRecentFolders();
+		items = mnuOpenRecent.getItems();
+		items.clear();
+		
+		for (String folder : folders)
+		{			
+			label = new Label("" + (index + 1) + ":");
+			item = new MenuItem(folder, label);
+			item.setOnAction(ev -> {
+				MenuItem source = (MenuItem)ev.getSource();
+				String dir = source.getText();
+				
+				openFolder(dir);
+			});
+			items.add(item);
+			++index;
+		}
+	}
+	
+	
+	/**
+	 * Abre a pasta e carrega o prgorama com os dados da pasta
+	 * @param dir
+	 */
+	private void openFolder(String dir)
+	{
+		File settings = new File(PROPS_FILE);
+		Properties props = PropertiesManager.load(settings);
+		
+		lblSelectedPath.setText(dir);
+		tabMain.setDisable(false);
+		loadFileStructure(new File(dir));
+		updateFileStructureButtons();
+		props.setProperty(DIR_KEY, dir);
+		PropertiesManager.save(settings, props);
+		recentFoldersLoader.save(PROPS_FILE, dir);
+		loadRecentFolders();
 	}
 }

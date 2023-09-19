@@ -36,7 +36,7 @@
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <Menu mnemonicParsing="false" text="Open Recent" />
+                  <Menu fx:id="mnuOpenRecent" mnemonicParsing="false" text="Open Recent" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="mnitBuildZip" disable="true" mnemonicParsing="false" onAction="#onBuildZipAction" text="Build ZIP" />
                   <SeparatorMenuItem mnemonicParsing="false" />

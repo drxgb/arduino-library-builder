@@ -2,6 +2,7 @@ package com.drxgb.arduinolibrarybuilder.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
 import com.drxgb.arduinolibrarybuilder.model.Theme;
@@ -72,6 +73,23 @@ public class ThemeService
 		if (index >= themes.size())
 			index = -1;
 		currentIndex = index;
+	}
+	
+	
+	/**
+	 * Define o tema atual pelo nome do arquivo do estilo.
+	 * @param name Nome do arquivo CSS
+	 */
+	public void setCurrentTheme(String name)
+	{
+		Optional<Theme> optional = themes.stream()
+				.filter(t -> t.getPath().equals(name))
+				.findFirst();
+		int index = -1;
+		
+		if (optional.isPresent())
+			index = themes.indexOf(optional.get());
+		setCurrentTheme(index);
 	}
 	
 	

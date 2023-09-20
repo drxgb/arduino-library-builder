@@ -210,15 +210,14 @@
 {
  	-fx-background-color: rgb(16, 16, 16);
 }
+
+.tab:selected
+{
+	-fx-background-color: rgb(0, 127, 255);
+}
  
 
 .tab .tab-label
 {
  	-fx-text-fill: white;
-}
- 
- 
-.tab .tab-close-button
-{
- 	-fx-background-color: red;
 }

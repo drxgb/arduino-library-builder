@@ -1,8 +1,11 @@
 package com.drxgb.arduinolibrarybuilder;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.Properties;
 
 import com.drxgb.arduinolibrarybuilder.controller.Controller;
+import com.drxgb.util.PropertiesManager;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -44,12 +47,22 @@ public final class ArduinoLibraryBuilder extends Application
 	 */
 	public static final String ICON_PATH = RESOURCES_PATH + "icon/";
 	
+	/**
+	 * Link da especificação da biblioteca
+	 */
+	public static final String LIB_SPECIFICATION_URL = "https://arduino.github.io/arduino-cli/dev/library-specification/";
+	
 	
 	/*
 	 * ===========================================================
 	 * 			*** ATRIBUTOS ***
 	 * ===========================================================
 	 */
+	
+	/**
+	 * A instância da aplicação
+	 */
+	private static ArduinoLibraryBuilder instance;
 	
 	/**
 	 * Cena da janela principal
@@ -100,6 +113,16 @@ public final class ArduinoLibraryBuilder extends Application
 	}
 	
 	
+	/**
+	 * Abre um link externo no navegador
+	 * @param url O caminho do link externo
+	 */
+	public static void openExternalLink(String url)
+	{
+		instance.getHostServices().showDocument(url);
+	}
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS IMPLEMENTADOS ***
@@ -116,9 +139,12 @@ public final class ArduinoLibraryBuilder extends Application
 		Parent root = loader.load();
 		Controller controller = loader.getController();
 		InputStream icon = getClass().getResourceAsStream(ICON_PATH + "app.png");
+		Properties props = PropertiesManager.load(new File(Controller.PROPS_FILE));
+		String style = props.getProperty(Controller.STYLE_KEY);
 		
+		instance = this;
 		mainScene = new Scene(root);
-		mainScene.getStylesheets().add(getClass().getResource("style/light.css").toExternalForm());
+		mainScene.getStylesheets().add(getClass().getResource(style).toExternalForm());
 		
 		if (icon != null)
 			stage.getIcons().add(new Image(icon));		

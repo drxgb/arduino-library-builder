@@ -1,6 +1,7 @@
 package com.drxgb.arduinolibrarybuilder.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,6 @@ import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
 import com.drxgb.util.PropertiesManager;
 
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +38,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Controlador da tela principal
@@ -46,28 +48,7 @@ import javafx.stage.DirectoryChooser;
  */
 public class MainController extends Controller
 	implements Initializable
-{
-	/*
-	 * ===========================================================
-	 * 			*** CONSTANTES ***
-	 * ===========================================================
-	 */
-	
-	/**
-	 * Nome do arquivo de configurações
-	 */
-	private static final String PROPS_FILE = "settings.properties";
-	
-	/**
-	 * Chave do último diretório carregado
-	 */
-	private static final String DIR_KEY = "dir";
-	
-	/**
-	 * Chave do último estilo carregado
-	 */
-	private static final String STYLE_KEY = "style";
-	
+{	
 	/*
 	 * ===========================================================
 	 * 			*** ATRIBUTOS ***
@@ -119,9 +100,9 @@ public class MainController extends Controller
 	 * 			*** ASSOCIAÇÕES ***
 	 * ===========================================================
 	 */
-	
-	private ThemeService themeService;
+
 	private RecentFoldersLoader recentFoldersLoader;
+	private ThemeService themeService;
 	
 	
 	/*
@@ -133,8 +114,8 @@ public class MainController extends Controller
 	public MainController()
 	{
 		super();
-		themeService = new ThemeService();
 		recentFoldersLoader = new RecentFoldersLoader();
+		themeService = new ThemeService();
 	}
 	
 
@@ -246,7 +227,26 @@ public class MainController extends Controller
 	 */
 	public void onThemeAction(ActionEvent ev)
 	{
+		File settings = new File(PROPS_FILE);
+		Properties props = PropertiesManager.load(settings);
+		MenuItem menuItem = (MenuItem)ev.getTarget();
+		String styleName = menuItem.getText();
+		Optional<Theme> optional = themeService.getThemes()
+				.stream()
+				.filter(t -> t.getName().equals(styleName))
+				.findFirst();
+		Theme theme;
 		
+		if (optional.isPresent())
+		{
+			theme = optional.get();
+			final int INDEX = themeService.getThemes().indexOf(theme);
+			
+			themeService.setCurrentTheme(INDEX);
+			themeService.applyTheme(root.getScene());
+			props.setProperty(STYLE_KEY, theme.getPath());
+			PropertiesManager.save(settings, props);
+		}
 	}
 	
 	
@@ -256,17 +256,22 @@ public class MainController extends Controller
 	@FXML
 	public void onLibrarySpecificationAction()
 	{
-		
+		String uri = ArduinoLibraryBuilder.LIB_SPECIFICATION_URL;
+		ArduinoLibraryBuilder.openExternalLink(uri);
 	}
 	
 	
 	/**
 	 * Abre a janela "Sobre"
+	 * @throws IOException 
 	 */
 	@FXML
-	public void onAboutAction()
+	public void onAboutAction() throws IOException
 	{
-		
+		Stage aboutStage = makeWindow("AboutView", "About");		
+
+		aboutStage.initModality(Modality.WINDOW_MODAL);
+		aboutStage.showAndWait();
 	}
 	
 	
@@ -504,6 +509,7 @@ public class MainController extends Controller
 		File dir = new File(ArduinoLibraryBuilder.class.getResource("style/").getPath()); 
 		ObservableList<MenuItem> items = mnuThemes.getItems();
 		List<Theme> themes = ThemeLoader.loadFromFolder(dir);
+		RadioMenuItem item;
 		ToggleGroup toggleGroup = new ToggleGroup();
 		Theme theme;
 		int initialIndex;
@@ -511,40 +517,16 @@ public class MainController extends Controller
 		items.clear();
 		for (int i = 0; i < themes.size(); ++i)
 		{
-			final int index = i;
-			RadioMenuItem item;
-
-			theme = themes.get(index);
+			theme = themes.get(i);
 			item = new RadioMenuItem(theme.getName());
 			item.setToggleGroup(toggleGroup);
-			item.setOnAction((ev) -> {
-				File settings = new File(PROPS_FILE);
-				Properties props = PropertiesManager.load(settings);
-				MenuItem menuItem = (MenuItem)ev.getSource();
-				String styleName = menuItem.getText();
-				Theme style = themeService.getThemes()
-						.stream()
-						.filter(t -> t.getName().equals(styleName))
-						.findFirst()
-						.get();
-				
-				themeService.setCurrentTheme(index);
-				themeService.applyTheme(root.getScene());
-				props.setProperty(STYLE_KEY, style.getPath());
-				PropertiesManager.save(settings, props);
-			});
+			item.setOnAction(ev -> onThemeAction(ev));
 			items.add(item);
-		}
-		
+		}		
 		themeService.setThemes(themes);
 		initialIndex = getLastStyleIndex();
-		
-		final RadioMenuItem item = (RadioMenuItem)mnuThemes.getItems().get(initialIndex);
-		Platform.runLater(() -> {
-			while (root.getScene() == null);
-			item.fire();
-			item.setSelected(true);
-		});
+		item = (RadioMenuItem)mnuThemes.getItems().get(initialIndex);
+		item.setSelected(true);
 	}
 	
 	

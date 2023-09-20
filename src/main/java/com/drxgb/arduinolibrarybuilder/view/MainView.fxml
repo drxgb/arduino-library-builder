@@ -222,7 +222,7 @@
                         <VBox spacing="12.0">
                            <children>
                               <CheckBox mnemonicParsing="false" onAction="#onUseKeywordFileAction" text="Use keywords.txt file" />
-                              <VBox fx:id="parKeywordsTab" disable="true">
+                              <VBox fx:id="parKeywordsTab" disable="true" spacing="20.0">
                                  <children>
                                     <HBox alignment="TOP_RIGHT">
                                        <children>

@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
+import com.drxgb.arduinolibrarybuilder.model.LibraryProperties;
 import com.drxgb.arduinolibrarybuilder.model.Theme;
 import com.drxgb.arduinolibrarybuilder.service.RecentFoldersLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
@@ -101,6 +102,8 @@ public class MainController extends Controller
 	 * ===========================================================
 	 */
 
+	private LibraryProperties libProperties;
+	
 	private RecentFoldersLoader recentFoldersLoader;
 	private ThemeService themeService;
 	
@@ -416,7 +419,7 @@ public class MainController extends Controller
 	
 	
 	/**
-	 * Insere dicas de uma opção por linha para os devido campos
+	 * Insere dicas de uma opção por linha para os devidos campos
 	 */
 	private void setTooltipForTextAreas()
 	{

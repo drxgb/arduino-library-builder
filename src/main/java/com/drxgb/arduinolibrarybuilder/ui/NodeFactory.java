@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -55,7 +56,7 @@ public class NodeFactory
 	public Parent makeKeywordPanel(Keyword keyword)
 	{
 		Pane parent;
-		Pane parField;
+		VBox parField;
 		Button btnRemove;
 		ImageView removeIcon;
 		InputStream input;
@@ -95,6 +96,7 @@ public class NodeFactory
 		fieldNodes.add(new Label("KEYWORD"));
 		fieldNodes.add(txtField);
 		parentNodes.add(parField);
+		HBox.setHgrow(parField, Priority.ALWAYS);
 		
 		// KEYWORD_TOKENTYPE
 		parField = makeKeywordField();
@@ -105,6 +107,7 @@ public class NodeFactory
 			.addListener((obs, oldValue, newValue) -> keyword.setTokenType(newValue));
 		cbxKeywordTokenTypes.setButtonCell(new KeywordTypeTokenCell());
 		cbxKeywordTokenTypes.setCellFactory(param -> new KeywordTypeTokenCell());
+		cbxKeywordTokenTypes.setMaxWidth(Double.MAX_VALUE);
 		
 		if (keywordTokenType != null)
 			cbxKeywordTokenTypes.getSelectionModel().select(keywordTokenType);
@@ -125,6 +128,7 @@ public class NodeFactory
 		fieldNodes.add(new Label("REFERENCE_LINK"));
 		fieldNodes.add(txtField);
 		parentNodes.add(parField);
+		HBox.setHgrow(parField, Priority.ALWAYS);
 		
 		// RSYNTAXTEXTAREA_TOKENTYPE
 		parField = makeKeywordField();
@@ -135,6 +139,7 @@ public class NodeFactory
 			.addListener((obs, oldValue, newValue) -> keyword.setRSyntaxTextAreaTokenType(newValue));
 		cbxRSyntaxTextAreaTokenTypes.setButtonCell(new RSyntaxTextAreaTokenTypeCell());
 		cbxRSyntaxTextAreaTokenTypes.setCellFactory(param -> new RSyntaxTextAreaTokenTypeCell());
+		cbxRSyntaxTextAreaTokenTypes.setMaxWidth(Double.MAX_VALUE);
 		
 		if (rSyntaxTextAreaTokenType != null)
 			cbxRSyntaxTextAreaTokenTypes.getSelectionModel().select(rSyntaxTextAreaTokenType);
@@ -154,7 +159,7 @@ public class NodeFactory
 	 * Cria o campo da palavra-chave
 	 * @return
 	 */
-	public Pane makeKeywordField()
+	public VBox makeKeywordField()
 	{
 		VBox field;
 		

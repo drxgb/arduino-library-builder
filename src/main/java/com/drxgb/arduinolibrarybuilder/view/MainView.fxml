@@ -196,13 +196,13 @@
                                     <TextField fx:id="txtMaintainerEmail" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                     <TextField fx:id="txtSentence" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                     <TextArea fx:id="txtParagraph" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.vgrow="ALWAYS" />
-                                    <ComboBox fx:id="cbxCategory" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                                    <ComboBox fx:id="cbxCategory" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="11" />
                                     <TextField fx:id="txtUrl" GridPane.columnIndex="1" GridPane.rowIndex="12" />
                                     <TextArea fx:id="txtArchitectures" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                                     <TextArea fx:id="txtDepends" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
                                     <TextArea fx:id="txtIncludes" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
                                     <CheckBox fx:id="chkUseALinkage" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="17" />
-                                    <ComboBox fx:id="cbxPrecompiled" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+                                    <ComboBox fx:id="cbxPrecompiled" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="18" />
                                     <TextField fx:id="txtLbFlags" GridPane.columnIndex="1" GridPane.rowIndex="19" />
                                  </children>
                               </GridPane>

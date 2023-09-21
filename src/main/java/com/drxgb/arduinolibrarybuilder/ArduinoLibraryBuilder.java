@@ -149,7 +149,7 @@ public final class ArduinoLibraryBuilder extends Application
 		if (icon != null)
 			stage.getIcons().add(new Image(icon));		
 		stage.setOnCloseRequest(ev -> controller.onCloseAction());
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setScene(mainScene);
 		stage.setTitle(APP_NAME);
 		stage.show();

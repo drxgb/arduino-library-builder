@@ -145,7 +145,12 @@ public class MainController extends Controller
 		setTooltipForTextAreas();
 		setCellFactoryToListView(lstUnselectedFiles);
 		setCellFactoryToListView(lstSelectedFiles);
+		loadCategoryField();
+		loadPrecompiledField();
 	}
+
+
+	
 
 
 	/*
@@ -615,5 +620,40 @@ public class MainController extends Controller
 		PropertiesManager.save(settings, props);
 		recentFoldersLoader.save(PROPS_FILE, dir);
 		loadRecentFolders();
+	}
+
+
+	/**
+	 * Carrega o campo Category na aba Properties
+	 */
+	private void loadCategoryField()
+	{
+		ObservableList<String> categories = cbxCategory.getItems();
+		
+		categories.add("Uncategorized");
+		categories.add("Display");
+		categories.add("Communication");
+		categories.add("Signal Input/Output");
+		categories.add("Sensors");
+		categories.add("Device Control");
+		categories.add("Timing");
+		categories.add("Data Storage");
+		categories.add("Data Processing");
+		categories.add("Other");
+		cbxCategory.getSelectionModel().selectFirst();
+	}
+	
+	
+	/**
+	 * Carrega o campo Precompiled na aba Properties
+	 */
+	public void loadPrecompiledField()
+	{
+		ObservableList<String> options = cbxPrecompiled.getItems();
+		
+		options.add("none");
+		options.add("true");
+		options.add("full");
+		cbxPrecompiled.getSelectionModel().selectFirst();
 	}
 }

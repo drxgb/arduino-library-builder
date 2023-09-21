@@ -109,7 +109,7 @@ public class NodeFactory
 		if (keywordTokenType != null)
 			cbxKeywordTokenTypes.getSelectionModel().select(keywordTokenType);
 		else
-			cbxKeywordTokenTypes.getSelectionModel().select(0);
+			cbxKeywordTokenTypes.getSelectionModel().selectFirst();
 
 		fieldNodes = parField.getChildren();
 		fieldNodes.add(new Label("KEYWORD_TOKENTYPE"));
@@ -139,7 +139,7 @@ public class NodeFactory
 		if (rSyntaxTextAreaTokenType != null)
 			cbxRSyntaxTextAreaTokenTypes.getSelectionModel().select(rSyntaxTextAreaTokenType);
 		else
-			cbxRSyntaxTextAreaTokenTypes.getSelectionModel().select(0);
+			cbxRSyntaxTextAreaTokenTypes.getSelectionModel().selectFirst();
 
 		fieldNodes = parField.getChildren();
 		fieldNodes.add(new Label("RSYNTAXTEXTAREA_TOKENTYPE"));

@@ -229,7 +229,7 @@
                                           <Button minWidth="140.0" mnemonicParsing="false" onAction="#onAddKeywordAction" text="Add Keyword" />
                                        </children>
                                     </HBox>
-                                    <VBox fx:id="parKeywords" />
+                                    <VBox fx:id="parKeywords" spacing="8.0" />
                                  </children>
                               </VBox>
                            </children>

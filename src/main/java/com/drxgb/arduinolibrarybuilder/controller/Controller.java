@@ -38,6 +38,11 @@ public abstract class Controller
 	 */
 	public static final String STYLE_KEY = "style";
 	
+	/**
+	 * Chave da propriedade da palavra-chave
+	 */
+	public static final String KEYWORD_PROPS_KEY = "Keyword";
+	
 	/*
 	 * ===========================================================
 	 * 			*** ATRIBUTOS ***

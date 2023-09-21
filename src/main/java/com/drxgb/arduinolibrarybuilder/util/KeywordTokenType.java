@@ -46,7 +46,7 @@ public enum KeywordTokenType
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(this)
+		sb.append(name())
 			.append(" (")
 			.append(hint)
 			.append(")");

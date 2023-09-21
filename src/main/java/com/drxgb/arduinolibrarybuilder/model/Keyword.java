@@ -56,7 +56,7 @@ public class Keyword
 	}
 
 
-	public RSyntaxTextAreaTokenType getrSyntaxTextAreaTokenType()
+	public RSyntaxTextAreaTokenType getRSyntaxTextAreaTokenType()
 	{
 		return rSyntaxTextAreaTokenType;
 	}
@@ -80,7 +80,7 @@ public class Keyword
 	}
 
 
-	public void setrSyntaxTextAreaTokenType(RSyntaxTextAreaTokenType rSyntaxTextAreaTokenType)
+	public void setRSyntaxTextAreaTokenType(RSyntaxTextAreaTokenType rSyntaxTextAreaTokenType)
 	{
 		this.rSyntaxTextAreaTokenType = rSyntaxTextAreaTokenType;
 	}

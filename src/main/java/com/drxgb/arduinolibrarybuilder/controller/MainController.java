@@ -10,11 +10,13 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
+import com.drxgb.arduinolibrarybuilder.model.Keyword;
 import com.drxgb.arduinolibrarybuilder.model.LibraryProperties;
 import com.drxgb.arduinolibrarybuilder.model.Theme;
 import com.drxgb.arduinolibrarybuilder.service.RecentFoldersLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeService;
+import com.drxgb.arduinolibrarybuilder.ui.NodeFactory;
 import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
 import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
@@ -38,6 +40,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -93,7 +96,7 @@ public class MainController extends Controller
 	
 	// Keywords
 	@FXML private Parent parKeywordsTab;
-	@FXML private Parent parKeywords;
+	@FXML private VBox parKeywords;
 	
 	
 	/*
@@ -103,6 +106,7 @@ public class MainController extends Controller
 	 */
 
 	private LibraryProperties libProperties;
+	private NodeFactory nodeFactory;
 	
 	private RecentFoldersLoader recentFoldersLoader;
 	private ThemeService themeService;
@@ -117,8 +121,10 @@ public class MainController extends Controller
 	public MainController()
 	{
 		super();
+		libProperties = new LibraryProperties();
 		recentFoldersLoader = new RecentFoldersLoader();
 		themeService = new ThemeService();
+		nodeFactory = new NodeFactory();
 	}
 	
 
@@ -397,17 +403,8 @@ public class MainController extends Controller
 	@FXML
 	public void onAddKeywordAction()
 	{
-		
-	}
-	
-	
-	/**
-	 * Retira a palavra-chave da lista
-	 * @param ev Evento disparado pelo elemento na janela
-	 */
-	public void onRemoveKeywordAction(ActionEvent ev)
-	{
-		
+		Parent panel = nodeFactory.makeKeywordPanel(new Keyword());	
+		parKeywords.getChildren().add(panel);
 	}
 	
 	

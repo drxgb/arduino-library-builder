@@ -83,5 +83,22 @@ public class Keyword
 	public void setRSyntaxTextAreaTokenType(RSyntaxTextAreaTokenType rSyntaxTextAreaTokenType)
 	{
 		this.rSyntaxTextAreaTokenType = rSyntaxTextAreaTokenType;
+	}	
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** TO STRING ***
+	 * ===========================================================
+	 */
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Keyword [\n\tname: ").append(name).append(",\n\treferenceLink: ").append(referenceLink)
+				.append(",\n\ttokenType: ").append(tokenType).append(",\n\trSyntaxTextAreaTokenType: ")
+				.append(rSyntaxTextAreaTokenType).append("\n]");
+		return builder.toString();
 	}
 }

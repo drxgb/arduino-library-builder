@@ -16,10 +16,12 @@ import com.drxgb.arduinolibrarybuilder.model.Theme;
 import com.drxgb.arduinolibrarybuilder.service.RecentFoldersLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeService;
+import com.drxgb.arduinolibrarybuilder.service.ZipBuilder;
 import com.drxgb.arduinolibrarybuilder.ui.NodeFactory;
 import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
 import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
+import com.drxgb.javafxutils.DialogBuilder;
 import com.drxgb.util.PropertiesManager;
 
 import javafx.collections.ObservableList;
@@ -27,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -105,9 +108,7 @@ public class MainController extends Controller
 	 * ===========================================================
 	 */
 
-	private LibraryProperties libProperties;
 	private NodeFactory nodeFactory;
-	
 	private RecentFoldersLoader recentFoldersLoader;
 	private ThemeService themeService;
 	
@@ -121,7 +122,6 @@ public class MainController extends Controller
 	public MainController()
 	{
 		super();
-		libProperties = new LibraryProperties();
 		recentFoldersLoader = new RecentFoldersLoader();
 		themeService = new ThemeService();
 		nodeFactory = new NodeFactory();
@@ -147,10 +147,7 @@ public class MainController extends Controller
 		setCellFactoryToListView(lstSelectedFiles);
 		loadCategoryField();
 		loadPrecompiledField();
-	}
-
-
-	
+	}	
 
 
 	/*
@@ -168,7 +165,42 @@ public class MainController extends Controller
 	@FXML
 	public void onBuildZipAction()
 	{
+		ZipBuilder builder = new ZipBuilder();
+		DirectoryChooser chooser = new DirectoryChooser();
+		LibraryProperties libProperties = new LibraryProperties();
+		List<File> selectedFiles = null;
+		List<Keyword> keywords = null;
+		File outputDir = chooser.showDialog(getStage());
 		
+		if (outputDir != null)
+		{
+			try
+			{
+				if (!parPropertiesTab.isDisable())
+				{
+					selectedFiles = lstSelectedFiles.getItems()
+							.stream()
+							.map(item -> new File(item))
+							.toList();
+				}
+				if (!parKeywordsTab.isDisable())
+				{
+					keywords = parKeywords.getChildren()
+							.stream()
+							.map(child -> (Keyword)child.getProperties().get(Controller.KEYWORD_PROPS_KEY))
+							.toList();
+				}
+				
+				buildLibraryProperties(libProperties);
+				builder.setOutputDirectory(outputDir);
+				//builder.execute(selectedFiles, libProperties, keywords);
+				DialogBuilder.show(getStage(), AlertType.INFORMATION, "GG", "ZIP was built successfully!");
+			}
+			catch (Exception e)
+			{
+				DialogBuilder.show(getStage(), AlertType.ERROR, "Build ZIP failed", e.getMessage());
+			}
+		}
 	}
 	
 	
@@ -647,7 +679,7 @@ public class MainController extends Controller
 	/**
 	 * Carrega o campo Precompiled na aba Properties
 	 */
-	public void loadPrecompiledField()
+	private void loadPrecompiledField()
 	{
 		ObservableList<String> options = cbxPrecompiled.getItems();
 		
@@ -655,5 +687,33 @@ public class MainController extends Controller
 		options.add("true");
 		options.add("full");
 		cbxPrecompiled.getSelectionModel().selectFirst();
+	}
+	
+	
+	/**
+	 * Monta as propriesdades de biblioteca de acordo com os campos
+	 * da janela
+	 * @param props A instância das propriedades a ser escrita
+	 */
+	private void buildLibraryProperties(LibraryProperties props)
+	{
+		final String SEP = "\\n";
+		
+		props.setName(txtName.getText());
+		props.setVersion(txtVersion.getText());
+		props.setAuthorName(txtAuthorName.getText());
+		props.setAuthorEmail(txtAuthorEmail.getText());
+		props.setMaintainerName(txtMaintainerName.getText());
+		props.setMaintainerEmail(txtMaintainerEmail.getText());
+		props.setSentence(txtSentence.getText());
+		props.setParagraph(txtParagraph.getText());
+		props.setCategory(cbxCategory.getSelectionModel().getSelectedItem());
+		props.setUrl(txtUrl.getText());
+		props.setArchitectures(Arrays.asList(txtArchitectures.getText().split(SEP)));
+		props.setDepends(Arrays.asList(txtDepends.getText().split(SEP)));
+		props.setIncludes(Arrays.asList(txtIncludes.getText().split(SEP)));
+		props.setUseALinkage(chkUseALinkage.isSelected());
+		props.setPrecompiled(cbxPrecompiled.getSelectionModel().getSelectedItem());
+		props.setLdFlags(txtLbFlags.getText());
 	}
 }

@@ -48,6 +48,16 @@ public final class ArduinoLibraryBuilder extends Application
 	public static final String ICON_PATH = RESOURCES_PATH + "icon/";
 	
 	/**
+	 * Arquivo de propriedades da biblioteca
+	 */
+	public static final String LIB_PROPS_FILE = "library.properties";
+	
+	/**
+	 * Arquivo de palavras-chave
+	 */
+	public static final String KEYWORDS_FILE = "keywords.txt";
+	
+	/**
 	 * Link da especificação da biblioteca
 	 */
 	public static final String LIB_SPECIFICATION_URL = "https://arduino.github.io/arduino-cli/dev/library-specification/";
@@ -72,7 +82,7 @@ public final class ArduinoLibraryBuilder extends Application
 	
 	/*
 	 * ===========================================================
-	 * 			*** M�TODOS PÚBLICOS ESTÁTICOS ***
+	 * 			*** MÉTODOS PÚBLICOS ESTÁTICOS ***
 	 * ===========================================================
 	 */
 	

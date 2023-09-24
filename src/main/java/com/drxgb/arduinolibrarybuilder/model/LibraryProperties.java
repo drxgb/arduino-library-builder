@@ -31,7 +31,7 @@ public class LibraryProperties
 	private List<String> includes;
 	private boolean useALinkage;
 	private String precompiled;
-	private String lbFlags;
+	private String ldFlags;
 	
 	
 	/*
@@ -139,9 +139,9 @@ public class LibraryProperties
 	}
 
 
-	public String getLbFlags()
+	public String getLdFlags()
 	{
-		return lbFlags;
+		return ldFlags;
 	}
 
 
@@ -235,8 +235,31 @@ public class LibraryProperties
 	}
 
 
-	public void setLbFlags(String lbFlags)
+	public void setLdFlags(String lbFlags)
 	{
-		this.lbFlags = lbFlags;
-	}	
+		this.ldFlags = lbFlags;
+	}		
+
+	
+	/*
+	 * ===========================================================
+	 * 			*** TO STRING ***
+	 * ===========================================================
+	 */
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("LibraryProperties [\n\tname: ").append(name).append(",\n\tversion: ").append(version)
+				.append(",\n\tauthorName: ").append(authorName).append(",\n\tauthorEmail: ").append(authorEmail)
+				.append(",\n\tmaintainerName: ").append(maintainerName).append(",\n\tmaintainerEmail: ")
+				.append(maintainerEmail).append(",\n\tsentence: ").append(sentence).append(",\n\tparagraph: ")
+				.append(paragraph).append(",\n\tcategory: ").append(category).append(",\n\turl: ").append(url)
+				.append(",\n\tarchitectures: ").append(architectures).append(",\n\tdepends: ").append(depends)
+				.append(",\n\tincludes: ").append(includes).append(",\n\tuseALinkage: ").append(useALinkage)
+				.append(",\n\tprecompiled: ").append(precompiled).append(",\n\tldFlags: ").append(ldFlags)
+				.append("\n]");
+		return builder.toString();
+	}
 }

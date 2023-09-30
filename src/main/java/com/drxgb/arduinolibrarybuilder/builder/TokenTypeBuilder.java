@@ -2,8 +2,8 @@ package com.drxgb.arduinolibrarybuilder.builder;
 
 import java.util.List;
 
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 
 /**
  * Gerador de listas de tipos de token

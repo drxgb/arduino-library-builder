@@ -1,6 +1,6 @@
 package com.drxgb.arduinolibrarybuilder.ui.control;
 
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 
 import javafx.scene.control.ListCell;
 

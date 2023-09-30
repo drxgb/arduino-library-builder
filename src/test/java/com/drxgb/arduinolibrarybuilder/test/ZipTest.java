@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.drxgb.arduinolibrarybuilder.model.Keyword;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
 import com.drxgb.arduinolibrarybuilder.model.LibraryProperties;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 import com.drxgb.arduinolibrarybuilder.service.ZipBuilder;
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
 
 /**
  * Realiza testes de compressão de arquivos

@@ -1,8 +1,8 @@
 package com.drxgb.arduinolibrarybuilder.ui;
 
 import com.drxgb.arduinolibrarybuilder.builder.TokenTypeBuilder;
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

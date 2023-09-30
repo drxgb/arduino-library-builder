@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FileUtils;
+
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
 import com.drxgb.arduinolibrarybuilder.io.FileStrategy;
 import com.drxgb.arduinolibrarybuilder.io.KeywordsFileStrategy;
@@ -24,82 +26,48 @@ import com.drxgb.arduinolibrarybuilder.model.LibraryProperties;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public class ZipBuilder
+public final class ZipBuilder extends FileBuilder
 {
 	/*
 	 * ===========================================================
-	 * 			*** CONSTANTES ***
+	 * 			*** MÉTODOS IMPLEMENTADOS ***
 	 * ===========================================================
 	 */
 	
-	private static final String ZIP_EXTENSION = ".zip";
-	
-	
-	/*
-	 * ===========================================================
-	 * 			*** ATRIBUTOS ***
-	 * ===========================================================
+	/**
+	 * @see com.drxgb.arduinolibrarybuilder.service.FileBuilder#getExtension()
 	 */
-	
-	private File outputDirectory;
-	private File outputFile;
-	
+	public String getExtension()
+	{
+		return ".zip";
+	}
+
 	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS PÚBLICOS ***
 	 * ===========================================================
-	 */
+	 */	
 	
 	/**
-	 * Define o diretório onde o ZIP será criado
-	 * @param outputDirectory O caminho de saída
+	 * Executa a construção do arquivo ZIP
+	 * @param inputFolderName O nome da pasta temporária a ser criada
+	 * @param inputFiles A lista de arquivos do diretório de entrada
+	 * @param props A instância das propriedades da biblioteca
+	 * @param keywords A lista de instâncias de palavras-chave
+	 * @throws IOException Quando ocorre um problema ao gravar o arquivo
 	 */
-	public void setOutputDirectory(File outputDirectory)
+	public void execute(
+			String inputFolderName,
+			List<File> inputFiles,
+			LibraryProperties props,
+			List<Keyword> keywords
+	)
+		throws IOException
 	{
-		this.outputDirectory = outputDirectory;
-		this.outputFile = null;
-	}
-	
-	
-	/**
-	 * Define o arquivo ZIP que será criado
-	 * @param outputFile
-	 */
-	public void setOutputFile(String fileName)
-	{
-		StringBuilder sb = new StringBuilder();
+		File input = createTempFile(inputFolderName, inputFiles);
 		
-		if (outputDirectory != null)
-		{
-			sb.append(outputDirectory.getAbsolutePath())
-				.append(File.separatorChar);
-		}
-		
-		sb.append(fileName);
-		if (fileName.lastIndexOf(ZIP_EXTENSION) == -1)
-				sb.append(ZIP_EXTENSION);
-		
-		outputFile = new File(sb.toString());
-	}
-	
-	
-	/**
-	 * Recebe o arquivo ZIP a ser criado
-	 * @return
-	 */
-	public File getOutputFile()
-	{
-		if (outputFile == null)
-		{
-			setOutputFile(
-					outputDirectory != null 
-						? outputDirectory.getName()
-						: "output"
-					+ ZIP_EXTENSION
-			);
-		}
-		return outputFile;
+		execute(input, props, keywords);		
 	}
 	
 	
@@ -110,7 +78,8 @@ public class ZipBuilder
 	 * @param keywords A lista de instâncias de palavras-chave
 	 * @throws IOException Quando ocorre um problema ao gravar o arquivo 
 	 */
-	public void execute(File input, LibraryProperties props, List<Keyword> keywords) throws IOException
+	public void execute(File input, LibraryProperties props, List<Keyword> keywords)
+			throws IOException
 	{
 		if (outputDirectory == null)
 			throw new RuntimeException("The output folder is not defined");
@@ -127,8 +96,11 @@ public class ZipBuilder
 		try (ZipOutputStream output =
 				new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile))))
 		{
-			compress(input, outputDirectory.getName(), output);
+			compress(input, input.getName(), output);
 		}
+		
+		if (isTemp(input))
+			FileUtils.deleteDirectory(input);
 	}
 	
 	

@@ -19,6 +19,7 @@ import com.drxgb.arduinolibrarybuilder.service.ThemeService;
 import com.drxgb.arduinolibrarybuilder.service.ZipBuilder;
 import com.drxgb.arduinolibrarybuilder.ui.NodeFactory;
 import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
+import com.drxgb.arduinolibrarybuilder.util.LibraryPropertiesUtils;
 import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
 import com.drxgb.javafxutils.DialogBuilder;
@@ -95,11 +96,14 @@ public class MainController extends Controller
 	@FXML private TextArea txtIncludes;
 	@FXML private CheckBox chkUseALinkage;
 	@FXML private ComboBox<String> cbxPrecompiled;
-	@FXML private TextField txtLbFlags;
+	@FXML private TextField txtLdFlags;
 	
 	// Keywords
 	@FXML private Parent parKeywordsTab;
 	@FXML private VBox parKeywords;
+	
+	// Atributos do controlador
+	private File selectedPath;
 	
 	
 	/*
@@ -167,37 +171,33 @@ public class MainController extends Controller
 	{
 		ZipBuilder builder = new ZipBuilder();
 		DirectoryChooser chooser = new DirectoryChooser();
-		LibraryProperties libProperties = new LibraryProperties();
-		List<File> selectedFiles = null;
-		List<Keyword> keywords = null;
-		File outputDir = chooser.showDialog(getStage());
+		File settings = new File(PROPS_FILE);
+		Properties props = PropertiesManager.load(settings); 
+		File outputDir = new File(props.getProperty(OUTPUT_KEY));		
+		
+		chooser.setInitialDirectory(outputDir);
+		outputDir = chooser.showDialog(getStage());
 		
 		if (outputDir != null)
 		{
 			try
 			{
-				if (!parPropertiesTab.isDisable())
-				{
-					selectedFiles = lstSelectedFiles.getItems()
-							.stream()
-							.map(item -> new File(item))
-							.toList();
-				}
-				if (!parKeywordsTab.isDisable())
-				{
-					keywords = parKeywords.getChildren()
-							.stream()
-							.map(child -> (Keyword)child.getProperties().get(Controller.KEYWORD_PROPS_KEY))
-							.toList();
-				}
+				List<File> selectedFiles = makeSelectedFilesToBuild();
+				LibraryProperties libProperties = makeLibraryProperties();
+				List<Keyword> keywords = makeKeywords();
+
+				props.setProperty(OUTPUT_KEY, outputDir.getAbsolutePath());
+				PropertiesManager.save(settings, props);
 				
 				buildLibraryProperties(libProperties);
 				builder.setOutputDirectory(outputDir);
-				//builder.execute(selectedFiles, libProperties, keywords);
+				builder.setOutputFile(buildOutputZipFileName());
+				builder.execute(selectedPath.getName(), selectedFiles, libProperties, keywords);
 				DialogBuilder.show(getStage(), AlertType.INFORMATION, "GG", "ZIP was built successfully!");
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 				DialogBuilder.show(getStage(), AlertType.ERROR, "Build ZIP failed", e.getMessage());
 			}
 		}
@@ -216,7 +216,7 @@ public class MainController extends Controller
 		DirectoryChooser chooser = new DirectoryChooser();
 		Properties props = PropertiesManager.load(settings); 
 		
-		path = props.getProperty(DIR_KEY);
+		path = props.getProperty(INPUT_KEY);
 		if (path != null)
 			chooser.setInitialDirectory(new File(path));
 		
@@ -644,11 +644,12 @@ public class MainController extends Controller
 		File settings = new File(PROPS_FILE);
 		Properties props = PropertiesManager.load(settings);
 		
+		selectedPath = new File(dir);
 		lblSelectedPath.setText(dir);
 		tabMain.setDisable(false);
 		loadFileStructure(new File(dir));
 		updateFileStructureButtons();
-		props.setProperty(DIR_KEY, dir);
+		props.setProperty(INPUT_KEY, dir);
 		PropertiesManager.save(settings, props);
 		recentFoldersLoader.save(PROPS_FILE, dir);
 		loadRecentFolders();
@@ -697,7 +698,54 @@ public class MainController extends Controller
 	 */
 	private void buildLibraryProperties(LibraryProperties props)
 	{
-		final String SEP = "\\n";
+		if (props != null)
+		{
+			final String SEP = "\\n";
+			
+			props.setName(txtName.getText());
+			props.setVersion(txtVersion.getText());
+			props.setAuthorName(txtAuthorName.getText());
+			props.setAuthorEmail(txtAuthorEmail.getText());
+			props.setMaintainerName(txtMaintainerName.getText());
+			props.setMaintainerEmail(txtMaintainerEmail.getText());
+			props.setSentence(txtSentence.getText());
+			props.setParagraph(txtParagraph.getText());
+			props.setCategory(cbxCategory.getSelectionModel().getSelectedItem());
+			props.setUrl(txtUrl.getText());
+			props.setArchitectures(Arrays.asList(txtArchitectures.getText().split(SEP)));
+			props.setDepends(Arrays.asList(txtDepends.getText().split(SEP)));
+			props.setIncludes(Arrays.asList(txtIncludes.getText().split(SEP)));
+			props.setUseALinkage(chkUseALinkage.isSelected());
+			props.setPrecompiled(cbxPrecompiled.getSelectionModel().getSelectedItem());
+			props.setLdFlags(txtLdFlags.getText());
+		}
+	}
+	
+	
+	/**
+	 * Cria o nome do arquivo de saída
+	 * @return O nome do arquivo ZIP de saída a ser criado
+	 */
+	private String buildOutputZipFileName()
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(selectedPath.getName()).append(".zip");
+		return sb.toString();
+	}
+	
+	
+	/**
+	 * Cria uma instância de <code>LibraryProperties</code> com os
+	 * campos da interface gráfica
+	 * @return Uma instância de <code>LibraryProperties</code>
+	 */
+	private LibraryProperties makeLibraryProperties()
+	{
+		if (parKeywordsTab.isDisable())
+			return null;
+		
+		LibraryProperties props = new LibraryProperties();
 		
 		props.setName(txtName.getText());
 		props.setVersion(txtVersion.getText());
@@ -707,13 +755,45 @@ public class MainController extends Controller
 		props.setMaintainerEmail(txtMaintainerEmail.getText());
 		props.setSentence(txtSentence.getText());
 		props.setParagraph(txtParagraph.getText());
-		props.setCategory(cbxCategory.getSelectionModel().getSelectedItem());
+		props.setCategory(cbxCategory.getValue());
 		props.setUrl(txtUrl.getText());
-		props.setArchitectures(Arrays.asList(txtArchitectures.getText().split(SEP)));
-		props.setDepends(Arrays.asList(txtDepends.getText().split(SEP)));
-		props.setIncludes(Arrays.asList(txtIncludes.getText().split(SEP)));
+		props.setArchitectures(LibraryPropertiesUtils.extractPropertyToList(txtArchitectures.getText()));
+		props.setDepends(LibraryPropertiesUtils.extractPropertyToList(txtDepends.getText()));
+		props.setIncludes(LibraryPropertiesUtils.extractPropertyToList(txtIncludes.getText()));
 		props.setUseALinkage(chkUseALinkage.isSelected());
-		props.setPrecompiled(cbxPrecompiled.getSelectionModel().getSelectedItem());
-		props.setLdFlags(txtLbFlags.getText());
+		props.setPrecompiled(cbxPrecompiled.getValue());
+		props.setLdFlags(txtLdFlags.getText());
+		
+		return props;
+	}
+	
+	
+	/**
+	 * Cria uma lista de instâncias de <code>Keyword</code> com os
+	 * campos da interface gráfica
+	 * @return Uma lista de palavras-chave
+	 */
+	private List<Keyword> makeKeywords()
+	{
+		if (parKeywordsTab.isDisable())
+			return null;
+		
+		return parKeywords.getChildren()
+				.stream()
+				.map(child -> (Keyword)child.getProperties().get(Controller.KEYWORD_PROPS_KEY))
+				.toList();
+	}
+	
+	
+	/**
+	 * Cria uma lista de arquivos a serem gravados em ZIP
+	 * @return A lista de arquivos
+	 */
+	private List<File> makeSelectedFilesToBuild()
+	{
+		return lstSelectedFiles.getItems()
+			.stream()
+			.map(item -> new File(selectedPath + File.separator + item))
+			.toList();
 	}
 }

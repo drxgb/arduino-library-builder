@@ -5,10 +5,10 @@ import java.io.InputStream;
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
 import com.drxgb.arduinolibrarybuilder.controller.Controller;
 import com.drxgb.arduinolibrarybuilder.model.Keyword;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 import com.drxgb.arduinolibrarybuilder.ui.control.KeywordTypeTokenCell;
 import com.drxgb.arduinolibrarybuilder.ui.control.RSyntaxTextAreaTokenTypeCell;
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

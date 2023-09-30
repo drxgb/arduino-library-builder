@@ -1,6 +1,6 @@
 package com.drxgb.arduinolibrarybuilder.ui.control;
 
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
 
 import javafx.scene.control.ListCell;
 

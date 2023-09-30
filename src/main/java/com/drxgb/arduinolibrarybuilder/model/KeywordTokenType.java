@@ -1,4 +1,4 @@
-package com.drxgb.arduinolibrarybuilder.util;
+package com.drxgb.arduinolibrarybuilder.model;
 
 /**
  * Representa o tipo de token da palavra-chave

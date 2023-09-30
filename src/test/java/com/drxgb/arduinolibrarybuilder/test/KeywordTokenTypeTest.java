@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
 
 /**
  * Realiza testes com o enumerador KeywordTokenType

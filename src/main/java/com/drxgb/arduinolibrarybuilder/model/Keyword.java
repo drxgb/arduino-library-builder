@@ -1,8 +1,5 @@
 package com.drxgb.arduinolibrarybuilder.model;
 
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
-
 /**
  * Representa o campo da palavra-chave em keywords.txt
  * 

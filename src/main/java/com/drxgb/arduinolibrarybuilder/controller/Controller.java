@@ -29,14 +29,19 @@ public abstract class Controller
 	public static final String PROPS_FILE = "settings.properties";
 	
 	/**
-	 * Chave do último diretório carregado
+	 * Chave do último diretório de entrada carregado
 	 */
-	public static final String DIR_KEY = "dir";
+	public static final String INPUT_KEY = "input";
 	
 	/**
 	 * Chave do último estilo carregado
 	 */
 	public static final String STYLE_KEY = "style";
+	
+	/**
+	 * Chave do último diretório de saída carregado
+	 */
+	public static final String OUTPUT_KEY = "output";
 	
 	/**
 	 * Chave da propriedade da palavra-chave

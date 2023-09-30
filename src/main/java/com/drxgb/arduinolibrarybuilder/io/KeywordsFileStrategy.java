@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.drxgb.arduinolibrarybuilder.model.Keyword;
-import com.drxgb.arduinolibrarybuilder.util.KeywordTokenType;
-import com.drxgb.arduinolibrarybuilder.util.RSyntaxTextAreaTokenType;
+import com.drxgb.arduinolibrarybuilder.model.KeywordTokenType;
+import com.drxgb.arduinolibrarybuilder.model.RSyntaxTextAreaTokenType;
 
 /**
  * Define ações de gravação e leitura do arquivo de palavras-chave

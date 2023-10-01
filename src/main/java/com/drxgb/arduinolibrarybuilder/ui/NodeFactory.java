@@ -92,6 +92,7 @@ public class NodeFactory
 		txtField = new TextField();
 		txtField.textProperty()
 			.addListener((obs, oldValue, newValue) -> keyword.setName(newValue));
+		txtField.setText(keyword.getName());
 		fieldNodes = parField.getChildren();
 		fieldNodes.add(new Label("KEYWORD"));
 		fieldNodes.add(txtField);
@@ -124,6 +125,7 @@ public class NodeFactory
 		txtField = new TextField();
 		txtField.textProperty()
 			.addListener((obs, oldValue, newValue) -> keyword.setReferenceLink(newValue));
+		txtField.setText(keyword.getReferenceLink());
 		fieldNodes = parField.getChildren();
 		fieldNodes.add(new Label("REFERENCE_LINK"));
 		fieldNodes.add(txtField);

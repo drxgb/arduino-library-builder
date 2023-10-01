@@ -3,6 +3,7 @@ package com.drxgb.arduinolibrarybuilder.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,12 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.arduinolibrarybuilder.ArduinoLibraryBuilder;
+import com.drxgb.arduinolibrarybuilder.io.KeywordsFileStrategy;
+import com.drxgb.arduinolibrarybuilder.io.LibraryFileStrategy;
 import com.drxgb.arduinolibrarybuilder.model.Keyword;
 import com.drxgb.arduinolibrarybuilder.model.LibraryProperties;
 import com.drxgb.arduinolibrarybuilder.model.Theme;
+import com.drxgb.arduinolibrarybuilder.service.FileManager;
 import com.drxgb.arduinolibrarybuilder.service.RecentFoldersLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeLoader;
 import com.drxgb.arduinolibrarybuilder.service.ThemeService;
@@ -29,6 +33,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -80,6 +85,7 @@ public class MainController extends Controller
 	@FXML private Button btnRemoveAll;
 	
 	// Properties
+	@FXML private CheckBox chkUseLibraryProperties;
 	@FXML private Parent parPropertiesTab;
 	@FXML private TextField txtName;
 	@FXML private TextField txtVersion;
@@ -99,6 +105,7 @@ public class MainController extends Controller
 	@FXML private TextField txtLdFlags;
 	
 	// Keywords
+	@FXML private CheckBox chkUseKeywordsFile;
 	@FXML private Parent parKeywordsTab;
 	@FXML private VBox parKeywords;
 	
@@ -189,7 +196,6 @@ public class MainController extends Controller
 				props.setProperty(OUTPUT_KEY, outputDir.getAbsolutePath());
 				PropertiesManager.save(settings, props);
 				
-				buildLibraryProperties(libProperties);
 				builder.setOutputDirectory(outputDir);
 				builder.setOutputFile(buildOutputZipFileName());
 				builder.execute(selectedPath.getName(), selectedFiles, libProperties, keywords);
@@ -206,9 +212,10 @@ public class MainController extends Controller
 	
 	/**
 	 * Escolhe o caminho da pasta da biblioteca
+	 * @throws IOException 
 	 */
 	@FXML
-	public void onOpenFolderAction()
+	public void onOpenFolderAction() throws IOException
 	{
 		String path;
 		File directory;
@@ -415,8 +422,7 @@ public class MainController extends Controller
 	@FXML
 	public void onUsePropertiesFileAction()
 	{
-		final boolean disable = parPropertiesTab.isDisable();
-		parPropertiesTab.setDisable(!disable);
+		parPropertiesTab.setDisable(!chkUseLibraryProperties.isSelected());
 	}
 	
 	
@@ -429,8 +435,7 @@ public class MainController extends Controller
 	@FXML
 	public void onUseKeywordFileAction()
 	{
-		final boolean disable = parKeywordsTab.isDisable();
-		parKeywordsTab.setDisable(!disable);
+		parKeywordsTab.setDisable(!chkUseKeywordsFile.isSelected());
 	}
 	
 	
@@ -623,11 +628,19 @@ public class MainController extends Controller
 		{			
 			label = new Label("" + (index + 1) + ":");
 			item = new MenuItem(folder, label);
-			item.setOnAction(ev -> {
-				MenuItem source = (MenuItem)ev.getSource();
-				String dir = source.getText();
-				
-				openFolder(dir);
+			item.setOnAction(ev ->
+			{
+				try
+				{
+					MenuItem source = (MenuItem)ev.getSource();
+					String dir = source.getText();
+					
+					openFolder(dir);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			});
 			items.add(item);
 			++index;
@@ -638,8 +651,9 @@ public class MainController extends Controller
 	/**
 	 * Abre a pasta e carrega o prgorama com os dados da pasta
 	 * @param dir
+	 * @throws IOException 
 	 */
-	private void openFolder(String dir)
+	private void openFolder(String dir) throws IOException
 	{
 		File settings = new File(PROPS_FILE);
 		Properties props = PropertiesManager.load(settings);
@@ -653,6 +667,8 @@ public class MainController extends Controller
 		PropertiesManager.save(settings, props);
 		recentFoldersLoader.save(PROPS_FILE, dir);
 		loadRecentFolders();
+		loadLibraryProperties();
+		loadKeywords();
 	}
 
 
@@ -692,32 +708,81 @@ public class MainController extends Controller
 	
 	
 	/**
-	 * Monta as propriesdades de biblioteca de acordo com os campos
-	 * da janela
-	 * @param props A instância das propriedades a ser escrita
+	 * Carrega as propriedades da biblioteca
+	 * @throws IOException 
 	 */
-	private void buildLibraryProperties(LibraryProperties props)
+	private void loadLibraryProperties() throws IOException
 	{
-		if (props != null)
+		StringBuilder sb = new StringBuilder();
+		File libPropsFile;
+		
+		sb.append(selectedPath.getAbsolutePath())
+			.append(File.separatorChar)
+			.append(ArduinoLibraryBuilder.LIB_PROPS_FILE);
+		libPropsFile = new File(sb.toString());
+		
+		if (libPropsFile != null)
 		{
-			final String SEP = "\\n";
+			FileManager manager = new FileManager();
+			LibraryProperties props = new LibraryProperties();
 			
-			props.setName(txtName.getText());
-			props.setVersion(txtVersion.getText());
-			props.setAuthorName(txtAuthorName.getText());
-			props.setAuthorEmail(txtAuthorEmail.getText());
-			props.setMaintainerName(txtMaintainerName.getText());
-			props.setMaintainerEmail(txtMaintainerEmail.getText());
-			props.setSentence(txtSentence.getText());
-			props.setParagraph(txtParagraph.getText());
-			props.setCategory(cbxCategory.getSelectionModel().getSelectedItem());
-			props.setUrl(txtUrl.getText());
-			props.setArchitectures(Arrays.asList(txtArchitectures.getText().split(SEP)));
-			props.setDepends(Arrays.asList(txtDepends.getText().split(SEP)));
-			props.setIncludes(Arrays.asList(txtIncludes.getText().split(SEP)));
-			props.setUseALinkage(chkUseALinkage.isSelected());
-			props.setPrecompiled(cbxPrecompiled.getSelectionModel().getSelectedItem());
-			props.setLdFlags(txtLdFlags.getText());
+			manager.setStrategy(new LibraryFileStrategy(props));
+			manager.load(libPropsFile);
+			
+			chkUseLibraryProperties.setSelected(true);
+			onUsePropertiesFileAction();
+			
+			txtName.setText(props.getName());
+			txtVersion.setText(props.getVersion());
+			txtAuthorName.setText(props.getAuthorName());
+			txtAuthorEmail.setText(props.getAuthorEmail());
+			txtMaintainerName.setText(props.getMaintainerName());
+			txtMaintainerEmail.setText(props.getMaintainerEmail());
+			txtSentence.setText(props.getSentence());
+			txtParagraph.setText(props.getParagraph());
+			cbxCategory.getSelectionModel().select(props.getCategory());
+			txtUrl.setText(props.getUrl());
+			txtArchitectures.setText(LibraryPropertiesUtils.makePropertyFromList(props.getArchitectures()));
+			txtDepends.setText(LibraryPropertiesUtils.makePropertyFromList(props.getDepends()));
+			txtIncludes.setText(LibraryPropertiesUtils.makePropertyFromList(props.getIncludes()));
+			chkUseALinkage.selectedProperty().setValue(props.isUseALinkage());
+			cbxPrecompiled.getSelectionModel().select(props.getPrecompiled());
+			txtLdFlags.setText(props.getLdFlags());
+		}
+	}
+	
+	
+	/**
+	 * Carrega as palavras-chave
+	 * @throws IOException 
+	 */
+	private void loadKeywords() throws IOException
+	{
+		StringBuilder sb = new StringBuilder();
+		File keywordsFile;
+		
+		sb.append(selectedPath.getAbsolutePath())
+			.append(File.separatorChar)
+			.append(ArduinoLibraryBuilder.KEYWORDS_FILE);
+		keywordsFile = new File(sb.toString());
+		
+		if (keywordsFile != null)
+		{
+			FileManager manager = new FileManager();
+			List<Keyword> keywords = new ArrayList<>();
+			List<Node> nodes = parKeywords.getChildren();
+			
+			manager.setStrategy(new KeywordsFileStrategy(keywords));
+			manager.load(keywordsFile);
+			
+			chkUseKeywordsFile.setSelected(true);
+			onUseKeywordFileAction();
+			
+			for (Keyword keyword : keywords)
+			{
+				Parent parent = nodeFactory.makeKeywordPanel(keyword);
+				nodes.add(parent);
+			}
 		}
 	}
 	
@@ -742,7 +807,7 @@ public class MainController extends Controller
 	 */
 	private LibraryProperties makeLibraryProperties()
 	{
-		if (parKeywordsTab.isDisable())
+		if (!chkUseLibraryProperties.isSelected())
 			return null;
 		
 		LibraryProperties props = new LibraryProperties();
@@ -755,13 +820,13 @@ public class MainController extends Controller
 		props.setMaintainerEmail(txtMaintainerEmail.getText());
 		props.setSentence(txtSentence.getText());
 		props.setParagraph(txtParagraph.getText());
-		props.setCategory(cbxCategory.getValue());
+		props.setCategory(cbxCategory.getSelectionModel().getSelectedItem());
 		props.setUrl(txtUrl.getText());
 		props.setArchitectures(LibraryPropertiesUtils.extractPropertyToList(txtArchitectures.getText()));
 		props.setDepends(LibraryPropertiesUtils.extractPropertyToList(txtDepends.getText()));
 		props.setIncludes(LibraryPropertiesUtils.extractPropertyToList(txtIncludes.getText()));
 		props.setUseALinkage(chkUseALinkage.isSelected());
-		props.setPrecompiled(cbxPrecompiled.getValue());
+		props.setPrecompiled(cbxPrecompiled.getSelectionModel().getSelectedItem());
 		props.setLdFlags(txtLdFlags.getText());
 		
 		return props;
@@ -775,7 +840,7 @@ public class MainController extends Controller
 	 */
 	private List<Keyword> makeKeywords()
 	{
-		if (parKeywordsTab.isDisable())
+		if (!chkUseKeywordsFile.isSelected())
 			return null;
 		
 		return parKeywords.getChildren()

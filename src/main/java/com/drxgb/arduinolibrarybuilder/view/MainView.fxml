@@ -132,7 +132,7 @@
                      <content>
                         <VBox spacing="24.0">
                            <children>
-                              <CheckBox mnemonicParsing="false" onAction="#onUsePropertiesFileAction" text="Use library.properties file" />
+                              <CheckBox fx:id="chkUseLibraryProperties" mnemonicParsing="false" onAction="#onUsePropertiesFileAction" text="Use library.properties file" />
                               <GridPane fx:id="parPropertiesTab" disable="true" hgap="8.0" vgap="4.0">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="RIGHT" hgrow="NEVER" />
@@ -203,7 +203,7 @@
                                     <TextArea fx:id="txtIncludes" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
                                     <CheckBox fx:id="chkUseALinkage" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="17" />
                                     <ComboBox fx:id="cbxPrecompiled" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="18" />
-                                    <TextField fx:id="txtLbFlags" GridPane.columnIndex="1" GridPane.rowIndex="19" />
+                                    <TextField fx:id="txtLdFlags" GridPane.columnIndex="1" GridPane.rowIndex="19" />
                                  </children>
                               </GridPane>
                            </children>
@@ -221,7 +221,7 @@
                      <content>
                         <VBox spacing="12.0">
                            <children>
-                              <CheckBox mnemonicParsing="false" onAction="#onUseKeywordFileAction" text="Use keywords.txt file" />
+                              <CheckBox fx:id="chkUseKeywordsFile" mnemonicParsing="false" onAction="#onUseKeywordFileAction" text="Use keywords.txt file" />
                               <VBox fx:id="parKeywordsTab" disable="true" spacing="20.0">
                                  <children>
                                     <HBox alignment="TOP_RIGHT">

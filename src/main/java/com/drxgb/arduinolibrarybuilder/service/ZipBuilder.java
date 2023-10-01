@@ -65,8 +65,7 @@ public final class ZipBuilder extends FileBuilder
 	)
 		throws IOException
 	{
-		File input = createTempFile(inputFolderName, inputFiles);
-		
+		File input = createTempFile(inputFolderName, inputFiles);		
 		execute(input, props, keywords);		
 	}
 	
@@ -103,6 +102,12 @@ public final class ZipBuilder extends FileBuilder
 			FileUtils.deleteDirectory(input);
 	}
 	
+	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS PRIVADOS ***
+	 * ===========================================================
+	 */
 	
 	/**
 	 * Grava dados adicionais ao diretório de entrada

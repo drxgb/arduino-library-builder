@@ -72,12 +72,17 @@ public abstract class LibraryPropertiesUtils
 		String name = null;
 		String email = null;
 		
-		if (value != null)
+		if (value != null && !value.isEmpty())
 		{
 			final int emailIndex = value.lastIndexOf('<');
 			
-			name = value.substring(0, emailIndex).trim();
-			email = value.substring(emailIndex + 1, value.length() - 1);
+			if (emailIndex != -1)
+			{
+				name = value.substring(0, emailIndex).trim();
+				email = value.substring(emailIndex + 1, value.length() - 1);
+			}
+			else
+				name = value;
 		}
 
 		result.put("name", name);

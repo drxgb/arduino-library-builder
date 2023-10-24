@@ -154,7 +154,8 @@ public final class ArduinoLibraryBuilder extends Application
 		
 		instance = this;
 		mainScene = new Scene(root);
-		mainScene.getStylesheets().add(getClass().getResource(style).toExternalForm());
+		if (style != null)
+			mainScene.getStylesheets().add(getClass().getResource(style).toExternalForm());
 		
 		if (icon != null)
 			stage.getIcons().add(new Image(icon));		

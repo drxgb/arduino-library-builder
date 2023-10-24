@@ -26,6 +26,7 @@ import com.drxgb.arduinolibrarybuilder.ui.control.FileListCell;
 import com.drxgb.arduinolibrarybuilder.util.LibraryPropertiesUtils;
 import com.drxgb.arduinolibrarybuilder.util.SortDirectory;
 import com.drxgb.arduinolibrarybuilder.util.SortFileList;
+import com.drxgb.arduinolibrarybuilder.util.Themes;
 import com.drxgb.javafxutils.DialogBuilder;
 import com.drxgb.util.PropertiesManager;
 
@@ -548,13 +549,15 @@ public class MainController extends Controller
 	 */
 	private void loadThemes()
 	{
-		File dir = new File(ArduinoLibraryBuilder.class.getResource("style/").getPath()); 
+		final String RESOURCES_PATH = "style/";
+		ThemeLoader loader = Themes.makeThemeLoader(RESOURCES_PATH);
+		List<Theme> themes = loader.load(RESOURCES_PATH);
 		ObservableList<MenuItem> items = mnuThemes.getItems();
-		List<Theme> themes = ThemeLoader.loadFromFolder(dir);
-		RadioMenuItem item;
 		ToggleGroup toggleGroup = new ToggleGroup();
+		RadioMenuItem item;
 		Theme theme;
 		int initialIndex;
+
 		
 		items.clear();
 		for (int i = 0; i < themes.size(); ++i)
@@ -567,7 +570,7 @@ public class MainController extends Controller
 		}		
 		themeService.setThemes(themes);
 		initialIndex = getLastStyleIndex();
-		item = (RadioMenuItem)mnuThemes.getItems().get(initialIndex);
+		item = (RadioMenuItem)items.get(initialIndex);
 		item.setSelected(true);
 	}
 	
